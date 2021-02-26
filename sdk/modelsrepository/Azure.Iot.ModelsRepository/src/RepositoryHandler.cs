@@ -96,7 +96,8 @@ namespace Azure.Iot.ModelsRepository
 
                 ModelMetadata metadata = new ModelQuery(result.Definition).ParseModel();
 
-                if (_clientOptions.DependencyResolution >= DependencyResolutionOption.Enabled)
+                if ((resolutionOption.HasValue && resolutionOption.Value >= DependencyResolutionOption.Enabled) ||
+                    _clientOptions.DependencyResolution >= DependencyResolutionOption.Enabled)
                 {
                     IList<string> dependencies = metadata.Dependencies;
 

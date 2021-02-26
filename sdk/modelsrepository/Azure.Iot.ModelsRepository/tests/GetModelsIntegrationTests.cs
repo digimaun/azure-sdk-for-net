@@ -115,6 +115,26 @@ namespace Azure.Iot.ModelsRepository.Tests
             }
         }
 
+        [TestCase(ModelsRepositoryTestBase.ClientType.Local)]
+        [TestCase(ModelsRepositoryTestBase.ClientType.Remote)]
+        public async Task GetModelsSingleDtmiWithDepsResolutionOptionOverride(ModelsRepositoryTestBase.ClientType clientType)
+        {
+            // Normally we would expect 3 models.
+            const string dtmi = "dtmi:com:example:TemperatureController;1";
+
+            ModelsRepositoryClient client = GetClient(clientType);
+            IDictionary<string, string> result = await client.GetModelsAsync(dtmi, resolutionOption: DependencyResolutionOption.Disabled);
+            var expectedDtmis = $"{dtmi}".Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+            result.Keys.Count.Should().Be(expectedDtmis.Length);
+
+            foreach (var id in expectedDtmis)
+            {
+                result.Should().ContainKey(id);
+                ModelsRepositoryTestBase.ParseRootDtmiFromJson(result[id]).Should().Be(id);
+            }
+        }
+
         public async Task GetModelsMultipleDtmisWithDeps()
         {
             const string dtmi1 = "dtmi:com:example:Phone;2";

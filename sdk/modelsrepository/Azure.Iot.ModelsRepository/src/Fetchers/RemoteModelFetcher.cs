@@ -38,7 +38,7 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             scope.Start();
             try
             {
-                Queue<string> work = PrepareWork(dtmi, repositoryUri);
+                Queue<string> work = PrepareWork(dtmi, repositoryUri, resolutionOption);
 
                 string remoteFetchError = string.Empty;
 
@@ -82,7 +82,7 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             scope.Start();
             try
             {
-                Queue<string> work = PrepareWork(dtmi, repositoryUri);
+                Queue<string> work = PrepareWork(dtmi, repositoryUri, resolutionOption);
 
                 string remoteFetchError = string.Empty;
                 RequestFailedException requestFailedExceptionThrown = null;
@@ -145,11 +145,11 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             }
         }
 
-        private Queue<string> PrepareWork(string dtmi, Uri repositoryUri)
+        private Queue<string> PrepareWork(string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption)
         {
             Queue<string> work = new Queue<string>();
 
-            if (_tryExpanded)
+            if ((resolutionOption.HasValue && resolutionOption.Value == DependencyResolutionOption.TryFromExpanded) || _tryExpanded)
             {
                 work.Enqueue(GetPath(dtmi, repositoryUri, true));
             }

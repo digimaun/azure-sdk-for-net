@@ -12,16 +12,16 @@ namespace Azure.Iot.ModelsRepository
         /// Try to get pre-computed model dependencies using .expanded.json.
         /// If the model expanded form does not exist fall back to normal dependency processing.
         /// </summary>
-        TryFromExpanded,
+        TryFromExpanded = 2,
 
         /// <summary>
         /// Disable model dependency resolution.
         /// </summary>
-        Disabled,
+        Disabled = 0,
 
         /// <summary>
         /// Enable model dependency resolution.
         /// </summary>
-        Enabled,
+        Enabled = 1,
     }
 }

@@ -41,7 +41,7 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             {
                 var work = new Queue<string>();
 
-                if (_tryExpanded)
+                if ((resolutionOption.HasValue && resolutionOption.Value == DependencyResolutionOption.TryFromExpanded) || _tryExpanded)
                 {
                     work.Enqueue(GetPath(dtmi, repositoryUri, true));
                 }
