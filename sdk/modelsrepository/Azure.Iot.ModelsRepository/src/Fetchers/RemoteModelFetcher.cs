@@ -31,7 +31,8 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             _clientDiagnostics = clientDiagnostics;
         }
 
-        public FetchResult Fetch(string dtmi, Uri repositoryUri, CancellationToken cancellationToken = default)
+        public FetchResult Fetch(
+            string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope("RemoteModelFetcher.Fetch");
             scope.Start();
@@ -60,7 +61,7 @@ namespace Azure.Iot.ModelsRepository.Fetchers
                     catch (Exception)
                     {
                         remoteFetchError =
-                            $"{string.Format(CultureInfo.InvariantCulture, StandardStrings.GenericResolverError, dtmi)} " +
+                            $"{string.Format(CultureInfo.InvariantCulture, StandardStrings.GenericGetModelsError, dtmi)} " +
                             string.Format(CultureInfo.InvariantCulture, StandardStrings.ErrorFetchingModelContent, tryContentPath);
                     }
                 }
@@ -74,7 +75,8 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             }
         }
 
-        public async Task<FetchResult> FetchAsync(string dtmi, Uri repositoryUri, CancellationToken cancellationToken = default)
+        public async Task<FetchResult> FetchAsync(
+            string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope("RemoteModelFetcher.Fetch");
             scope.Start();
@@ -114,7 +116,7 @@ namespace Azure.Iot.ModelsRepository.Fetchers
                     if (genericExceptionThrown != null || requestFailedExceptionThrown != null)
                     {
                         remoteFetchError =
-                            $"{string.Format(CultureInfo.InvariantCulture, StandardStrings.GenericResolverError, dtmi)} " +
+                            $"{string.Format(CultureInfo.InvariantCulture, StandardStrings.GenericGetModelsError, dtmi)} " +
                             string.Format(CultureInfo.InvariantCulture, StandardStrings.ErrorFetchingModelContent, tryContentPath);
                     }
                 }

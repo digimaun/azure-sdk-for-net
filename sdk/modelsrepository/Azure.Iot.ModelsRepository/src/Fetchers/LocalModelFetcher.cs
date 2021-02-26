@@ -27,12 +27,12 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             _tryExpanded = clientOptions.DependencyResolution == DependencyResolutionOption.TryFromExpanded;
         }
 
-        public Task<FetchResult> FetchAsync(string dtmi, Uri repositoryUri, CancellationToken cancellationToken = default)
+        public Task<FetchResult> FetchAsync(string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(Fetch(dtmi, repositoryUri, cancellationToken));
+            return Task.FromResult(Fetch(dtmi, repositoryUri, resolutionOption, cancellationToken));
         }
 
-        public FetchResult Fetch(string dtmi, Uri repositoryUri, CancellationToken cancellationToken = default)
+        public FetchResult Fetch(string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope("LocalModelFetcher.Fetch");
             scope.Start();
@@ -70,7 +70,7 @@ namespace Azure.Iot.ModelsRepository.Fetchers
                 }
 
                 throw new RequestFailedException(
-                    $"{string.Format(CultureInfo.InvariantCulture, StandardStrings.GenericResolverError, dtmi)} {fnfError}",
+                    $"{string.Format(CultureInfo.InvariantCulture, StandardStrings.GenericGetModelsError, dtmi)} {fnfError}",
                     new FileNotFoundException(fnfError));
             }
             catch (Exception ex)
