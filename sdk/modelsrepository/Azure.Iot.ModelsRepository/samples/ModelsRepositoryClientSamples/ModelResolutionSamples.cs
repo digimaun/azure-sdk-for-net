@@ -101,7 +101,7 @@ namespace Azure.Iot.ModelsRepository.Samples
             }
         }
 
-        public static async Task TryGetModelsWithInvalidDtmi()
+        public static async Task TryGetModelsWithInvalidDtmiAsync()
         {
             var invalidDtmi = "dtmi:com:example:InvalidDtmi";
 

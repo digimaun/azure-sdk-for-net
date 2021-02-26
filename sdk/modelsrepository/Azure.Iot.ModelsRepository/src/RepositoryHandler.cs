@@ -61,6 +61,7 @@ namespace Azure.Iot.ModelsRepository
         {
             var processedModels = new Dictionary<string, string>();
             Queue<string> toProcessModels = PrepareWork(dtmis);
+            DependencyResolutionOption targetResolutionOption = resolutionOption ?? _clientOptions.DependencyResolution;
 
             while (toProcessModels.Count != 0)
             {
@@ -76,8 +77,8 @@ namespace Azure.Iot.ModelsRepository
                 ModelsRepositoryEventSource.Instance.ProcessingDtmi(targetDtmi);
 
                 FetchResult result = async
-                    ? await FetchAsync(targetDtmi, resolutionOption, cancellationToken).ConfigureAwait(false)
-                    : Fetch(targetDtmi, resolutionOption, cancellationToken);
+                    ? await FetchAsync(targetDtmi, targetResolutionOption, cancellationToken).ConfigureAwait(false)
+                    : Fetch(targetDtmi, targetResolutionOption, cancellationToken);
 
                 if (result.FromExpanded)
                 {
@@ -96,8 +97,7 @@ namespace Azure.Iot.ModelsRepository
 
                 ModelMetadata metadata = new ModelQuery(result.Definition).ParseModel();
 
-                if ((resolutionOption.HasValue && resolutionOption.Value >= DependencyResolutionOption.Enabled) ||
-                    _clientOptions.DependencyResolution >= DependencyResolutionOption.Enabled)
+                if (targetResolutionOption >= DependencyResolutionOption.Enabled)
                 {
                     IList<string> dependencies = metadata.Dependencies;
 
@@ -129,12 +129,12 @@ namespace Azure.Iot.ModelsRepository
             return processedModels;
         }
 
-        private Task<FetchResult> FetchAsync(string dtmi, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken)
+        private Task<FetchResult> FetchAsync(string dtmi, DependencyResolutionOption resolutionOption, CancellationToken cancellationToken)
         {
             return _modelFetcher.FetchAsync(dtmi, _repositoryUri, resolutionOption, cancellationToken);
         }
 
-        private FetchResult Fetch(string dtmi, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken)
+        private FetchResult Fetch(string dtmi, DependencyResolutionOption resolutionOption, CancellationToken cancellationToken)
         {
             return _modelFetcher.Fetch(dtmi, _repositoryUri, resolutionOption, cancellationToken);
         }

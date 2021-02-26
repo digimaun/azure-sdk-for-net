@@ -26,7 +26,7 @@ namespace Azure.Iot.ModelsRepository.Samples
             await ModelResolutionSamples.GetModelsFromLocalRepoAsync();
             await ModelResolutionSamples.TryGetModelsFromGlobalRepoButNotFoundAsync();
             await ModelResolutionSamples.TryGetModelsFromLocalRepoButNotFoundAsync();
-            await ModelResolutionSamples.TryGetModelsWithInvalidDtmi();
+            await ModelResolutionSamples.TryGetModelsWithInvalidDtmiAsync();
 
             // Parser integration samples
             await ParserIntegrationSamples.GetModelsAndParseAsync();

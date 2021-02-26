@@ -18,13 +18,13 @@ namespace Azure.Iot.ModelsRepository.Fetchers
     /// </summary>
     internal class LocalModelFetcher : IModelFetcher
     {
-        private readonly bool _tryExpanded;
         private readonly ClientDiagnostics _clientDiagnostics;
+        private readonly ModelsRepositoryClientOptions _clientOptions;
 
         public LocalModelFetcher(ClientDiagnostics clientDiagnostics, ModelsRepositoryClientOptions clientOptions)
         {
             _clientDiagnostics = clientDiagnostics;
-            _tryExpanded = clientOptions.DependencyResolution == DependencyResolutionOption.TryFromExpanded;
+            _clientOptions = clientOptions;
         }
 
         public Task<FetchResult> FetchAsync(string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption, CancellationToken cancellationToken = default)
@@ -40,8 +40,8 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             try
             {
                 var work = new Queue<string>();
-
-                if ((resolutionOption.HasValue && resolutionOption.Value == DependencyResolutionOption.TryFromExpanded) || _tryExpanded)
+                DependencyResolutionOption targetResolutionOption = resolutionOption ?? _clientOptions.DependencyResolution;
+                if (targetResolutionOption == DependencyResolutionOption.TryFromExpanded)
                 {
                     work.Enqueue(GetPath(dtmi, repositoryUri, true));
                 }

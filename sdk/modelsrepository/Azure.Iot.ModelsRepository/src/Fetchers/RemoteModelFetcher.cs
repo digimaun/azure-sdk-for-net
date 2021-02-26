@@ -22,12 +22,12 @@ namespace Azure.Iot.ModelsRepository.Fetchers
     {
         private readonly HttpPipeline _pipeline;
         private readonly ClientDiagnostics _clientDiagnostics;
-        private readonly bool _tryExpanded;
+        private readonly ModelsRepositoryClientOptions _clientOptions;
 
         public RemoteModelFetcher(ClientDiagnostics clientDiagnostics, ModelsRepositoryClientOptions clientOptions)
         {
-            _pipeline = CreatePipeline(clientOptions);
-            _tryExpanded = clientOptions.DependencyResolution == DependencyResolutionOption.TryFromExpanded;
+            _clientOptions = clientOptions;
+            _pipeline = CreatePipeline(_clientOptions);
             _clientDiagnostics = clientDiagnostics;
         }
 
@@ -38,7 +38,8 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             scope.Start();
             try
             {
-                Queue<string> work = PrepareWork(dtmi, repositoryUri, resolutionOption);
+                DependencyResolutionOption targetResolutionOption = resolutionOption ?? _clientOptions.DependencyResolution;
+                Queue<string> work = PrepareWork(dtmi, repositoryUri, targetResolutionOption == DependencyResolutionOption.TryFromExpanded);
 
                 string remoteFetchError = string.Empty;
 
@@ -82,7 +83,8 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             scope.Start();
             try
             {
-                Queue<string> work = PrepareWork(dtmi, repositoryUri, resolutionOption);
+                DependencyResolutionOption targetResolutionOption = resolutionOption ?? _clientOptions.DependencyResolution;
+                Queue<string> work = PrepareWork(dtmi, repositoryUri, targetResolutionOption == DependencyResolutionOption.TryFromExpanded);
 
                 string remoteFetchError = string.Empty;
                 RequestFailedException requestFailedExceptionThrown = null;
@@ -145,11 +147,11 @@ namespace Azure.Iot.ModelsRepository.Fetchers
             }
         }
 
-        private Queue<string> PrepareWork(string dtmi, Uri repositoryUri, DependencyResolutionOption? resolutionOption)
+        private static Queue<string> PrepareWork(string dtmi, Uri repositoryUri, bool tryExpanded)
         {
             Queue<string> work = new Queue<string>();
 
-            if ((resolutionOption.HasValue && resolutionOption.Value == DependencyResolutionOption.TryFromExpanded) || _tryExpanded)
+            if (tryExpanded)
             {
                 work.Enqueue(GetPath(dtmi, repositoryUri, true));
             }

@@ -9,19 +9,20 @@ namespace Azure.Iot.ModelsRepository
     public enum DependencyResolutionOption
     {
         /// <summary>
-        /// Try to get pre-computed model dependencies using .expanded.json.
-        /// If the model expanded form does not exist fall back to normal dependency processing.
-        /// </summary>
-        TryFromExpanded = 2,
-
-        /// <summary>
         /// Disable model dependency resolution.
         /// </summary>
-        Disabled = 0,
+        Disabled,
 
         /// <summary>
-        /// Enable model dependency resolution.
+        /// Enable model dependency resolution. The client will parse
+        /// models and calculate dependencies recursively.
         /// </summary>
-        Enabled = 1,
+        Enabled,
+
+        /// <summary>
+        /// Try to get pre-computed model dependencies using .expanded.json.
+        /// If the model expanded form does not exist fall back to DependencyResolutionOption.Enabled processing.
+        /// </summary>
+        TryFromExpanded
     }
 }
