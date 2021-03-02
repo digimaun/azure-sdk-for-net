@@ -85,7 +85,7 @@ Console.WriteLine($"{dtmi} resolved in {models.Count} interfaces.");
 ```
 
 You are also able to get definitions for multiple root models at a time by leveraging
-the `GetModels` overload that supports an IEnumerable.
+the `GetModels` overload that supports an `IEnumerable`.
 
 ```C# Snippet:IoTModelsRepositorySamplesGetMultipleModelsFromGlobalRepoAsync
 var dtmis = new [] {"dtmi:com:example:TemperatureController;1", "dtmi:com:example:azuresphere:sampledevice;1"};
@@ -107,21 +107,23 @@ Console.WriteLine($"Dtmis {string.Join(', ', dtmis)} resolved in {models.Count} 
 
 ## Digital Twins Model Parser Integration
 
-The samples provide an example extension to support seamless integration with the Digital Twins Model Parser.
+The samples provide two different patterns to integrate with the Digital Twins Model Parser.
+
+The following snippet shows first fetching model definitions from the Azure IoT Models Repository then parsing them.
 
 ```C# Snippet:IoTModelsRepositorySamplesParserIntegrationGetModelsAndParseAsync
-
 var dtmi = "dtmi:com:example:TemperatureController;1";
 var client = new ModelsRepositoryClient();
 IDictionary<string, string> models = await client.GetModelsAsync(dtmi).ConfigureAwait(false);
 var parser = new ModelParser();
 IReadOnlyDictionary<Dtmi, DTEntityInfo> parseResult = await parser.ParseAsync(models.Values.ToArray());
 Console.WriteLine($"{dtmi} resolved in {models.Count} interfaces with {parseResult.Count} entities.");
-
 ```
 
-```C# Snippet:IoTModelsRepositorySamplesParserIntegrationParseAndGetModelsAsync
+Alternatively, the following snippet shows parsing a model, then fetching dependent model definitions during parsing.
+This is achieved by configuring the `ModelParser` to use the sample [ParserDtmiResolver][modelsrepository_sample_extension] client extension.
 
+```C# Snippet:IoTModelsRepositorySamplesParserIntegrationParseAndGetModelsAsync
 var dtmi = "dtmi:com:example:TemperatureController;1";
 var client = new ModelsRepositoryClient(new ModelsRepositoryClientOptions(resolutionOption: DependencyResolutionOption.Disabled));
 IDictionary<string, string> models = await client.GetModelsAsync(dtmi).ConfigureAwait(false);
@@ -135,7 +137,7 @@ Console.WriteLine($"{dtmi} resolved in {models.Count} interfaces with {parseResu
 ```
 
 <!-- LINKS -->
-[source]: https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/modelsrepository/Azure.Iot.ModelsRepository/src
+[modelsrepository_sample_extension]: https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/modelsrepository/Azure.Iot.ModelsRepository/samples/ModelsRepositoryClientSamples/ModelsRepositoryClientExtensions.cs
 [modelsrepository_clientoptions]: https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/modelsrepository/Azure.Iot.ModelsRepository/src/ModelsRepositoryClientOptions.cs
 [modelsrepository_msdocs]: https://docs.microsoft.com/azure/iot-pnp/concepts-model-repository
 [modelsrepository_publish_msdocs]: https://docs.microsoft.com/azure/iot-pnp/concepts-model-repository#publish-a-model
