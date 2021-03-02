@@ -83,7 +83,7 @@ namespace Azure.Iot.ModelsRepository.Samples
             // In this case the dtmi "dtmi:com:example:TemperatureController;1" has 2 model dependencies
             // and the dtmi "dtmi:com:example:azuresphere:sampledevice;1" has no additional dependencies.
             // The returned IDictionary will include 4 models.
-            Console.WriteLine($"Dtmis {string.Join(',', dtmis)} resolved in {models.Count} interfaces.");
+            Console.WriteLine($"Dtmis {string.Join(', ', dtmis)} resolved in {models.Count} interfaces.");
 
             #endregion Snippet:IoTModelsRepositorySamplesGetMultipleModelsFromGlobalRepoAsync
         }

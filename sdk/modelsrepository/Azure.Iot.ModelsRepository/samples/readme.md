@@ -19,18 +19,18 @@ The samples project demonstrates the following:
 ### Simple Initialization
 
 ```C# Snippet:IoTModelsRepositorySamplesCreateServiceClientSimpleWithGlobalEndpoint
-    // When no Uri is provided for instantiation, the Azure IoT Models Repository global endpoint
-    // https://devicemodels.azure.com/ is used and the dependency model resolution option is set to TryFromExpanded.
-    var client = new ModelsRepositoryClient();
-    Console.WriteLine($"Initialized client pointing to global endpoint: {client.RepositoryUri}");
+// When no Uri is provided for instantiation, the Azure IoT Models Repository global endpoint
+// https://devicemodels.azure.com/ is used and the dependency model resolution option is set to TryFromExpanded.
+var client = new ModelsRepositoryClient(new ModelsRepositoryClientOptions());
+Console.WriteLine($"Initialized client pointing to global endpoint: {client.RepositoryUri}");
 ```
 
 ```C# Snippet:IoTModelsRepositorySamplesCreateServiceClientSimpleWithLocalRepository
-    // The client will also work with a local filesystem Uri. This example shows initalization
-    // with a local Uri and disabling model dependency resolution.
-    client = new ModelsRepositoryClient(new Uri(ClientSamplesLocalModelsRepository),
-        new ModelsRepositoryClientOptions(resolutionOption: DependencyResolutionOption.Disabled));
-    Console.WriteLine($"Initialized client pointing to local path: {client.RepositoryUri}");
+// The client will also work with a local filesystem Uri. This example shows initalization
+// with a local Uri and disabling model dependency resolution.
+client = new ModelsRepositoryClient(new Uri(ClientSamplesLocalModelsRepository),
+    new ModelsRepositoryClientOptions(resolutionOption: DependencyResolutionOption.Disabled));
+Console.WriteLine($"Initialized client pointing to local path: {client.RepositoryUri}");
 ```
 
 ### Override options
