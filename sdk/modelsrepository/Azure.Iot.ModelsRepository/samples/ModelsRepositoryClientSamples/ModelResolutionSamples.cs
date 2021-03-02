@@ -19,8 +19,8 @@ namespace Azure.Iot.ModelsRepository.Samples
         {
             #region Snippet:IoTModelsRepositorySamplesCreateServiceClientSimpleWithGlobalEndpoint
 
-            // When no Uri is provided for instantiation. The global Azure IoT Models Repository endpoint is used
-            // (https://devicemodels.azure.com/) and the dependency model resolution option is set to TryFromExpanded.
+            // When no Uri is provided for instantiation, the Azure IoT Models Repository global endpoint
+            // https://devicemodels.azure.com/ is used and the dependency model resolution option is set to TryFromExpanded.
             var client = new ModelsRepositoryClient(new ModelsRepositoryClientOptions());
             Console.WriteLine($"Initialized client pointing to global endpoint: {client.RepositoryUri}");
 

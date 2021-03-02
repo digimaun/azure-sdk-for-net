@@ -19,8 +19,8 @@ The samples project demonstrates the following:
 ### Simple Initialization
 
 ```C# Snippet:IoTModelsRepositorySamplesCreateServiceClientSimpleWithGlobalEndpoint
-    // When no Uri is provided for instantiation. The global Azure IoT Models Repository endpoint is used
-    // (https://devicemodels.azure.com/) and the dependency model resolution option is set to TryFromExpanded.
+    // When no Uri is provided for instantiation, the Azure IoT Models Repository global endpoint
+    // https://devicemodels.azure.com/ is used and the dependency model resolution option is set to TryFromExpanded.
     var client = new ModelsRepositoryClient();
     Console.WriteLine($"Initialized client pointing to global endpoint: {client.RepositoryUri}");
 ```
@@ -35,8 +35,7 @@ The samples project demonstrates the following:
 
 ### Override options
 
-If you need to override pipeline behavior, such as provide your own HttpClient instance, you can do that via the other constructor that takes a
-[ModelsRepositoryClientOptions](https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/digitaltwins/Azure.DigitalTwins.Core/src/DigitalTwinsClientOptions.cs) parameter.
+If you need to override pipeline behavior, such as provide your own `HttpClient` instance, you can do that via constructor that takes a [ModelsRepositoryClientOptions][modelsrepository_clientoptions] parameter.
 It provides an opportunity to override default behavior including:
 
 - Overriding [transport][azure_core_transport]
@@ -137,7 +136,7 @@ Console.WriteLine($"{dtmi} resolved in {models.Count} interfaces with {parseResu
 
 <!-- LINKS -->
 [source]: https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/modelsrepository/Azure.Iot.ModelsRepository/src
-[azure_core_library]: https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/core/Azure.Core
+[modelsrepository_clientoptions]: https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/modelsrepository/Azure.Iot.ModelsRepository/src/ModelsRepositoryClientOptions.cs
 [modelsrepository_msdocs]: https://docs.microsoft.com/azure/iot-pnp/concepts-model-repository
 [modelsrepository_publish_msdocs]: https://docs.microsoft.com/azure/iot-pnp/concepts-model-repository#publish-a-model
 [modelsrepository_iot_endpoint]: https://devicemodels.azure.com/
